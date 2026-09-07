@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LogiXair MedNet | DOC OW-MED-001</title>
+<style>
+  :root{
+    --bg:#FAF9F6;
+    --bg-raised:#F1EFE9;
+    --ink:#15140F;
+    --ink-dim:#68665C;
+    --line:#DEDBD0;
+    --alert:#C73A16;
+    --clinical:#0E7C72;
+    --amber:#9C6B0B;
+    --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    --sans: 'IBM Plex Sans', -apple-system, sans-serif;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:16px; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  a{ color:inherit; }
+  ::selection{ background:var(--alert); color:#FAF9F6; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+  .mono{ font-family:var(--mono); }
+  .label{ font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-dim); }
+
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  header{ position:sticky; top:0; z-index:50; background:rgba(250,249,246,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); }
+  .headbar{ display:flex; align-items:center; justify-content:space-between; padding:16px 32px; max-width:1180px; margin:0 auto; }
+  .brand{ font-family:var(--mono); font-weight:600; font-size:14px; letter-spacing:.08em; }
+  .brand span{ color:var(--alert); }
+  nav{ display:flex; gap:19px; }
+  nav a{ font-family:var(--mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; text-decoration:none; color:var(--ink-dim); transition:color .2s; white-space:nowrap; }
+  nav a:hover{ color:var(--ink); }
+  .cta{ font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; border:1px solid var(--ink); padding:8px 14px; text-decoration:none; color:var(--ink); white-space:nowrap; transition:background .2s, color .2s; }
+  .cta:hover{ background:var(--ink); color:var(--bg); }
+  @media(max-width:980px){ nav{ display:none; } }
+  .docline{ font-family:var(--mono); font-size:11px; color:var(--ink-dim); letter-spacing:.05em; border-bottom:1px solid var(--line); padding:8px 32px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .docline .blink{ color:var(--alert); }
+
+  .hero{ padding:96px 0 0; border-bottom:1px solid var(--line); }
+  .hero-eyebrow{ display:flex; align-items:center; gap:10px; margin-bottom:22px; }
+  .dot{ width:7px; height:7px; border-radius:50%; background:var(--alert); animation:pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.25; } }
+  h1{ font-weight:600; font-size:clamp(34px,4.6vw,56px); letter-spacing:-.02em; line-height:1.08; max-width:900px; color:var(--ink); }
+  h1 em{ font-style:normal; color:var(--clinical); }
+  .hero-sub{ margin-top:24px; max-width:620px; color:var(--ink-dim); font-size:16.5px; }
+  .hero-tag{ margin-top:16px; font-family:var(--mono); font-size:12px; color:var(--clinical); max-width:600px; }
+
+  .telemetry{ margin-top:48px; border-top:1px solid var(--line); display:grid; grid-template-columns:repeat(4,1fr); }
+  .tcell{ padding:20px 28px; border-right:1px solid var(--line); }
+  .tcell:last-child{ border-right:none; }
+  .tcell .tval{ font-family:var(--mono); font-size:26px; font-weight:600; }
+  .tcell .tval.a{ color:var(--alert); }
+  .tcell .tkey{ margin-top:4px; }
+  @media(max-width:820px){ .telemetry{ grid-template-columns:repeat(2,1fr); } .tcell:nth-child(2){ border-right:none; } }
+
+  section{ padding:84px 0; border-bottom:1px solid var(--line); }
+  .kicker{ display:flex; align-items:baseline; gap:14px; margin-bottom:10px; }
+  .kicker .num{ font-family:var(--mono); color:var(--ink-dim); font-size:13px; }
+  .kicker h2{ font-size:clamp(24px,3vw,34px); font-weight:600; letter-spacing:-.01em; }
+  .section-sub{ color:var(--ink-dim); font-size:14.5px; max-width:680px; margin-bottom:40px; }
+
+  /* principles */
+  .principles{ display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  @media(max-width:960px){ .principles{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:560px){ .principles{ grid-template-columns:1fr; } }
+  .pcard{ background:var(--bg); padding:26px 22px; min-height:190px; display:flex; flex-direction:column; transition:background .25s; }
+  .pcard:hover{ background:var(--bg-raised); }
+  .pcard .pnum{ font-family:var(--mono); color:var(--alert); font-size:12px; margin-bottom:14px; }
+  .pcard h3{ font-size:15px; font-weight:600; margin-bottom:10px; }
+  .pcard p{ font-size:13px; color:var(--ink-dim); line-height:1.55; }
+
+  /* proof grid */
+  .proofgrid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  @media(max-width:860px){ .proofgrid{ grid-template-columns:1fr; } }
+  .proofcard{ background:var(--bg); padding:28px 26px; display:flex; flex-direction:column; }
+  .proofcard .ptag{ font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--alert); margin-bottom:10px; }
+  .proofcard h4{ font-size:16.5px; font-weight:600; margin-bottom:10px; letter-spacing:-.005em; }
+  .proofcard p{ font-size:13.5px; color:var(--ink-dim); line-height:1.55; margin-bottom:12px; flex:1; }
+  .proofcard .psrc{ font-family:var(--mono); font-size:10px; color:var(--ink-dim); opacity:.7; }
+  .whitespace{ margin-top:32px; border:1px dashed var(--alert); background:#FBF1EC; padding:22px 26px; }
+  .whitespace .label{ color:var(--alert); margin-bottom:8px; }
+  .whitespace p{ font-size:13.5px; color:var(--ink); line-height:1.6; }
+  .whitespace b{ color:var(--alert); }
+
+  /* use case blocks */
+  .usecase{ display:grid; grid-template-columns:.85fr 1.15fr; gap:52px; align-items:center; }
+  .usecase.reverse{ grid-template-columns:1.15fr .85fr; }
+  .usecase.reverse .uc-copy{ order:2; }
+  .usecase.reverse .uc-viz{ order:1; }
+  @media(max-width:900px){
+    .usecase, .usecase.reverse{ grid-template-columns:1fr; }
+    .usecase.reverse .uc-copy, .usecase.reverse .uc-viz{ order:unset; }
+  }
+  .uc-tag{ font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; margin-bottom:14px; display:inline-block; }
+  .uc-tag.clin{ color:var(--clinical); }
+  .uc-tag.trm{ color:var(--alert); }
+  .uc-copy h3{ font-size:26px; font-weight:600; margin-bottom:14px; letter-spacing:-.01em; }
+  .uc-copy p{ color:var(--ink-dim); font-size:15px; margin-bottom:18px; max-width:460px; }
+  .uc-specs{ display:flex; gap:28px; margin-top:22px; flex-wrap:wrap; }
+  .uc-specs div{ font-family:var(--mono); }
+  .uc-specs .v{ font-size:20px; color:var(--ink); }
+  .uc-specs .k{ font-size:10px; color:var(--ink-dim); letter-spacing:.1em; text-transform:uppercase; margin-top:4px; }
+  .uc-viz{ border:1px solid var(--line); background:var(--bg-raised); padding:14px; }
+  .uc-viz svg{ width:100%; height:auto; display:block; }
+  .drawpath{ stroke-dasharray:400; stroke-dashoffset:400; animation:draw 3.6s linear infinite; }
+  .drawpath.b{ animation-delay:3.6s; }
+  @keyframes draw{ 0%{ stroke-dashoffset:400; opacity:0; } 3%{ opacity:1; } 45%{ stroke-dashoffset:0; opacity:1; } 50%{ opacity:0; } 100%{ opacity:0; stroke-dashoffset:0; } }
+  .drawpath2{ stroke-dasharray:420; stroke-dashoffset:420; animation:draw2 2.4s linear infinite; }
+  @keyframes draw2{ 0%{ stroke-dashoffset:420; opacity:0; } 4%{ opacity:1; } 70%{ stroke-dashoffset:0; opacity:1; } 100%{ stroke-dashoffset:0; opacity:0; } }
+
+  /* flow (how it works) */
+  .flow{ display:grid; grid-template-columns:repeat(6,1fr); gap:18px; position:relative; margin-top:12px; }
+  .flow::before{ content:''; position:absolute; top:17px; left:0; right:0; height:1px; background:var(--line); z-index:0; }
+  @media(max-width:900px){ .flow{ grid-template-columns:repeat(3,1fr); row-gap:36px; } .flow::before{ display:none; } }
+  @media(max-width:560px){ .flow{ grid-template-columns:repeat(2,1fr); } }
+  .flow-step{ position:relative; z-index:1; }
+  .flow-step .fnum{ width:34px; height:34px; border-radius:50%; background:var(--bg); border:1.5px solid var(--ink); display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:13px; font-weight:600; margin-bottom:14px; }
+  .flow-step.accent .fnum{ border-color:var(--clinical); color:var(--clinical); }
+  .flow-step.alertnum .fnum{ border-color:var(--alert); color:var(--alert); }
+  .flow-step h4{ font-size:13px; font-weight:600; margin-bottom:6px; letter-spacing:.01em; }
+  .flow-step p{ font-size:12px; color:var(--ink-dim); line-height:1.5; }
+  .flow-note{ margin-top:36px; font-size:13px; color:var(--ink-dim); max-width:640px; }
+
+  /* use case cards grid */
+  .ucgrid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  @media(max-width:900px){ .ucgrid{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:600px){ .ucgrid{ grid-template-columns:1fr; } }
+  .uccard{ background:var(--bg); padding:24px 22px; min-height:170px; }
+  .uccard .utag{ display:inline-block; font-family:var(--mono); font-size:9.5px; letter-spacing:.07em; text-transform:uppercase; padding:3px 8px; border:1px solid var(--line); color:var(--ink-dim); margin-bottom:12px; }
+  .uccard .utag.proven{ color:var(--clinical); border-color:var(--clinical); }
+  .uccard .utag.global{ color:var(--amber); border-color:var(--amber); }
+  .uccard h4{ font-size:14.5px; font-weight:600; margin-bottom:8px; }
+  .uccard p{ font-size:12.5px; color:var(--ink-dim); line-height:1.55; }
+  .uc-note{ margin-top:26px; font-size:13.5px; color:var(--ink-dim); max-width:680px; }
+
+  /* platform spec */
+  .platform{ display:grid; grid-template-columns:1.15fr .85fr; gap:48px; align-items:center; }
+  @media(max-width:940px){ .platform{ grid-template-columns:1fr; } }
+  .specsheet{ border:1px solid var(--line); background:var(--bg-raised); }
+  .specrow{ display:flex; justify-content:space-between; padding:16px 22px; border-bottom:1px solid var(--line); font-family:var(--mono); font-size:13px; }
+  .specrow:last-child{ border-bottom:none; }
+  .specrow .k{ color:var(--ink-dim); letter-spacing:.06em; text-transform:uppercase; font-size:11px; }
+  .specrow .v{ font-weight:600; }
+  .plat-copy p{ color:var(--ink-dim); font-size:15px; margin-bottom:16px; max-width:480px; }
+  .plat-copy h3{ font-size:26px; font-weight:600; margin-bottom:14px; letter-spacing:-.01em; }
+
+  /* stats + funnel */
+  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  @media(max-width:900px){ .stats{ grid-template-columns:repeat(2,1fr); } }
+  .stat{ background:var(--bg); padding:30px 24px; }
+  .stat .big{ font-family:var(--mono); font-size:32px; font-weight:600; color:var(--alert); }
+  .stat .cap{ margin-top:8px; font-size:12.5px; color:var(--ink-dim); line-height:1.5; }
+  .stat .src{ margin-top:10px; font-family:var(--mono); font-size:9.5px; color:var(--ink-dim); opacity:.75; }
+  .funnel{ border:1px solid var(--line); background:var(--bg-raised); padding:32px; margin-top:32px; }
+  .frow{ display:grid; grid-template-columns:170px 1fr 220px; align-items:center; gap:18px; padding:16px 0; border-bottom:1px dashed var(--line); }
+  .frow:last-child{ border-bottom:none; }
+  .frow .flabel{ font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-dim); }
+  .fbarwrap{ height:34px; background:#EAE7DD; position:relative; overflow:hidden; }
+  .fbar{ height:100%; transform-origin:left; transform:scaleX(0); animation:grow 1.4s ease forwards; }
+  .fbar.tam{ width:100%; background:var(--ink-dim); animation-delay:.1s; }
+  .fbar.sam{ width:66%; background:var(--clinical); animation-delay:.35s; }
+  .fbar.gap{ width:0%; background:var(--alert); position:relative; }
+  @keyframes grow{ to{ transform:scaleX(1); } }
+  .fval{ font-family:var(--mono); font-size:13px; text-align:right; }
+  .fval b{ font-size:16px; color:var(--ink); }
+  .fnote{ font-family:var(--mono); font-size:10px; color:var(--ink-dim); text-align:right; margin-top:2px; }
+  .srcnote{ margin-top:14px; font-family:var(--mono); font-size:10.5px; color:var(--ink-dim); }
+
+  footer{ padding:60px 0 80px; }
+  .footgrid{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+  .footgrid .label{ margin-bottom:8px; }
+  .footnote{ margin-top:60px; font-family:var(--mono); font-size:11px; color:var(--ink-dim); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="headbar">
+    <div class="brand" style="display:flex; align-items:center; gap:10px;">
+      <svg width="26" height="26" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#15140F" stroke-width="4"/>
+        <path d="M20,42 L60,62 L100,42" fill="none" stroke="#0E7C72" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M60,28 L60,94" stroke="#C73A16" stroke-width="10" stroke-linecap="round"/>
+        <path d="M40,62 L80,62" stroke="#C73A16" stroke-width="10" stroke-linecap="round"/>
+        <circle cx="60" cy="28" r="7" fill="#C73A16"/>
+      </svg>
+      LOGIXAIR <span>MEDNET</span>
+    </div>
+    <nav>
+      <a href="#thesis">Thesis</a>
+      <a href="#proof">Proof</a>
+      <a href="#diagnostic">Diagnostic</a>
+      <a href="#trauma">First Aid</a>
+      <a href="#flow">How it works</a>
+      <a href="#usecases">Use cases</a>
+      <a href="#platform">Platform</a>
+      <a href="#market">Market</a>
+    </nav>
+    <a class="cta" href="#contact">Request Brief →</a>
+  </div>
+  <div class="docline">
+    <span>DOC OW-MED-001 / REV 0.4 / DIAGNOSTIC &amp; TRAUMA-RESPONSE VTOL NETWORK</span>
+    <span>LOGIXAIR / <span class="blink">PRE-LAUNCH</span></span>
+  </div>
+</header>
+
+<section class="hero" id="thesis">
+  <div class="wrap">
+    <div class="hero-eyebrow"><span class="dot"></span><span class="label">§01 Thesis</span></div>
+    <h1 class="reveal">We're not building a medical delivery drone. We're building the <em>golden-hour infrastructure</em> India doesn't have.</h1>
+    <p class="hero-sub reveal">Outbound delivery is a solved problem, and it's already flying inside two of India's largest hospital chains. The unsolved leg is the one back: diagnostic samples to the lab, and trained first response to a roadside trauma scene, both inside the sixty minutes that decide the outcome.</p>
+    <p class="hero-tag reveal mono">// MEDNET: THE NETWORK THAT PULLS SAMPLES, SUPPLIES AND RESPONSE TOWARD THE PATIENT, FASTER THAN THE ROAD CAN.</p>
+
+    <div class="telemetry reveal">
+      <div class="tcell"><div class="tval">20km</div><div class="tkey label">Range, hub radius</div></div>
+      <div class="tcell"><div class="tval">120km/h</div><div class="tkey label">Cruise speed</div></div>
+      <div class="tcell"><div class="tval">3kg</div><div class="tkey label">Payload class</div></div>
+      <div class="tcell"><div class="tval a">1:5</div><div class="tkey label">RTA victims reaching golden-hour care</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="wrap">
+    <div class="kicker reveal"><span class="num">§02</span><h2>This is already flying</h2></div>
+    <p class="section-sub reveal">None of this is a hypothetical pitch-deck slide. It's operating today, in Indian hospital corridors and on Indian operating tables.</p>
+
+    <div class="proofgrid reveal">
+      <div class="proofcard">
+        <span class="ptag">Narayana Health x Airbound / Bengaluru, live since Jan 2026</span>
+        <h4>700+ flights, zero failures, 54 days</h4>
+        <p>A 4km corridor between Narayana Health's Chandapura Clinic and its Central Laboratory at Electronic City: up to 20 flights a day, up to 40 diagnostic samples per flight, a 10-minute flight replacing a traffic-bound road run.</p>
+        <span class="psrc">Source: Airbound / Narayana Health, Mar 2026</span>
+      </div>
+      <div class="proofcard">
+        <span class="ptag">Apollo Hospitals x ePlane / Amber Wings, MoU Jul 2026</span>
+        <h4>Blood, organs, vaccines, samples, network-wide</h4>
+        <p>Apollo signed to fly medical delivery drones across its 1,066-ambulance, hospital, clinic and diagnostic-centre network, citing the same golden-hour trauma gap this thesis is built on.</p>
+        <span class="psrc">Source: Apollo Hospitals / The ePlane Company, Jul 2026</span>
+      </div>
+      <div class="proofcard">
+        <span class="ptag">Kasturba Hospital, Manipal x ICMR i-Drone / Karnataka, 2024</span>
+        <h4>A cancer diagnosis, mid-surgery, by drone</h4>
+        <p>An oncopathology tissue sample flew 37km in 16 minutes from a peripheral hospital in Karkala to the tertiary lab in Manipal, deciding whether a resected mass was malignant while the patient was still on the table.</p>
+        <span class="psrc">Source: MAHE / ICMR, Apr 2024</span>
+      </div>
+      <div class="proofcard">
+        <span class="ptag">Univ. of Maryland x Toronto General / global, 2019 &amp; 2024</span>
+        <h4>The first drone-delivered kidney, then lung</h4>
+        <p>A kidney flown to transplant in Baltimore in 2019, and a donor lung flown across Toronto in 2024 (a 5-minute flight versus 25 minutes by road). Organ transport by air is a proven capability, not a speculative one.</p>
+        <span class="psrc">Source: UMMC 2019; Toronto General, Science Robotics, 2024</span>
+      </div>
+    </div>
+
+    <div class="whitespace reveal">
+      <div class="label">The actual whitespace</div>
+      <p>A few of India's largest hospital chains are already partnering with aerial-logistics operators to prepare for the future of medical delivery and emergency care. Several equally large chains have not yet locked in a partner. That's the pitch: not "drones for hospitals" in general, but the next major chain's own closed network, before one of them signs with someone else.</p>
+    </div>
+  </div>
+</section>
+
+<section id="principles">
+  <div class="wrap">
+    <div class="kicker reveal"><span class="num">§03</span><h2>First principles</h2></div>
+    <div class="principles reveal">
+      <div class="pcard">
+        <div class="pnum">01</div>
+        <h3>Round-trip, not one-way</h3>
+        <p>Every mission is outbound + inbound on the same flight. A drone that only delivers is doing half the job the hub needs.</p>
+      </div>
+      <div class="pcard">
+        <div class="pnum">02</div>
+        <h3>Unprepared-site ops</h3>
+        <p>Launch and recovery from a PHC courtyard or a highway marker, not a paved pad. That's the actual infra gap in India.</p>
+      </div>
+      <div class="pcard">
+        <div class="pnum">03</div>
+        <h3>Docking autonomy</h3>
+        <p>Aircraft live at unmanned hub nodes and launch on trigger. Per-flight labour cost has to trend toward zero.</p>
+      </div>
+      <div class="pcard">
+        <div class="pnum">04</div>
+        <h3>Built to spec, not inherited</h3>
+        <p>A purpose-built airframe sized to this market's numbers (20km, 120km/h, 3kg), not a scaled variant of an unrelated platform.</p>
+      </div>
+      <div class="pcard">
+        <div class="pnum">05</div>
+        <h3>Certify to the corridor</h3>
+        <p>DGCA's BVLOS approvals move fastest inside designated medical corridors. Win corridor by corridor, not nationally on day one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="diagnostic">
+  <div class="wrap">
+    <div class="kicker reveal"><span class="num">§04A</span><h2>Diagnostic hub delivery</h2></div>
+    <div class="usecase">
+      <div class="uc-copy reveal">
+        <span class="uc-tag clin">◆ Service line A / scheduled</span>
+        <h3>The return leg is the differentiator</h3>
+        <p>Outbound: kits, reagents, medicine to the spoke. Inbound: blood draws, sputum and biopsy samples back to the central lab, temperature- and vibration-controlled, chain-of-custody logged per flight, on the <em style="color:var(--ink);">same</em> aircraft, same trip.</p>
+        <div class="uc-specs">
+          <div><div class="v">20km</div><div class="k">Hub radius</div></div>
+          <div><div class="v">3kg</div><div class="k">Payload</div></div>
+          <div><div class="v">2-leg</div><div class="k">Out + return</div></div>
+        </div>
+      </div>
+      <div class="uc-viz reveal">
+        <svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid1" width="32" height="32" patternUnits="userSpaceOnUse">
+              <path d="M32 0H0V32" fill="none" stroke="#E4E2D8" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="640" height="380" fill="url(#grid1)"/>
+          <g stroke="#D5D2C6" stroke-width="1.5" fill="none">
+            <path d="M100,190 Q170,80 320,190" />
+            <path d="M100,190 Q170,320 320,190" />
+            <path d="M540,190 Q470,80 320,190" />
+            <path d="M540,190 Q470,320 320,190" />
+          </g>
+          <path class="drawpath" d="M320,190 Q170,80 100,190" fill="none" stroke="#9C6B0B" stroke-width="2"/>
+          <path class="drawpath b" d="M100,190 Q170,320 320,190" fill="none" stroke="#0E7C72" stroke-width="2"/>
+          <circle cx="320" cy="190" r="30" fill="#F1EFE9" stroke="#0E7C72" stroke-width="1.5"/>
+          <circle cx="320" cy="190" r="30" fill="none" stroke="#0E7C72" stroke-width="1" opacity=".5">
+            <animate attributeName="r" values="30;58;30" dur="3.2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values=".5;0;.5" dur="3.2s" repeatCount="indefinite"/>
+          </circle>
+          <text x="320" y="195" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#0E7C72">HUB</text>
+          <circle cx="100" cy="190" r="7" fill="#FAF9F6" stroke="#68665C" stroke-width="1.5"/>
+          <circle cx="540" cy="190" r="7" fill="#FAF9F6" stroke="#68665C" stroke-width="1.5"/>
+          <text x="100" y="220" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#68665C">PHC-04</text>
+          <text x="540" y="220" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#68665C">PHC-11</text>
+          <g id="ac-out">
+            <path d="M-6,0 L6,0 M0,-5 L0,5" stroke="#9C6B0B" stroke-width="2"/>
+            <circle r="3" fill="#9C6B0B"/>
+          </g>
+          <animateMotion xlink:href="#ac-out" dur="3.6s" repeatCount="indefinite" rotate="auto" path="M320,190 Q170,80 100,190"/>
+          <g id="ac-in">
+            <g transform="rotate(90)">
+              <path d="M-6,0 L6,0 M0,-5 L0,5" stroke="#0E7C72" stroke-width="2"/>
+              <circle r="3" fill="#0E7C72"/>
+              <rect x="-3" y="-9" width="6" height="6" fill="none" stroke="#0E7C72" stroke-width="1"/>
+            </g>
+          </g>
+          <animateMotion xlink:href="#ac-in" dur="3.6s" begin="3.6s" repeatCount="indefinite" rotate="auto" path="M100,190 Q170,320 320,190"/>
+          <text x="24" y="30" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9C6B0B">// OUTBOUND: KIT/REAGENT</text>
+          <text x="24" y="46" font-family="IBM Plex Mono, monospace" font-size="9" fill="#0E7C72">// INBOUND: SAMPLE, COLD-CHAIN</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="trauma">
+  <div class="wrap">
+    <div class="kicker reveal"><span class="num">§04B</span><h2>First Aid as a Service</h2></div>
+    <div class="usecase reverse">
+      <div class="uc-copy reveal">
+        <span class="uc-tag trm">◆ Service line B / on-demand, sub-10-min</span>
+        <h3>Buying the minutes before the ambulance arrives</h3>
+        <p>Triggered by a highway control room or a bystander SOS. The aircraft launches from the nearest hub node carrying an AED, haemostatic dressings, and a live comms link to a remote medic, reaching a congested-highway accident site ahead of road traffic.</p>
+        <div class="uc-specs">
+          <div><div class="v">≤10min</div><div class="k">Target ETA, 20km ring</div></div>
+          <div><div class="v">21/hr</div><div class="k">India RTA deaths, 2025</div></div>
+          <div><div class="v">Art. 21</div><div class="k">Constitutional right</div></div>
+        </div>
+      </div>
+      <div class="uc-viz reveal">
+        <svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid2" width="32" height="32" patternUnits="userSpaceOnUse">
+              <path d="M32 0H0V32" fill="none" stroke="#E4E2D8" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="640" height="380" fill="url(#grid2)"/>
+          <path d="M20,300 C180,300 220,300 320,260 C420,220 500,140 620,120" fill="none" stroke="#C7C3B5" stroke-width="10" stroke-linecap="round"/>
+          <path d="M20,300 C180,300 220,300 320,260 C420,220 500,140 620,120" fill="none" stroke="#FAF9F6" stroke-width="2" stroke-dasharray="10 10"/>
+          <path class="drawpath2" d="M70,70 C180,90 300,150 430,190" fill="none" stroke="#C73A16" stroke-width="2"/>
+          <circle cx="70" cy="70" r="10" fill="#F1EFE9" stroke="#0E7C72" stroke-width="1.5"/>
+          <text x="70" y="52" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#0E7C72">HUB NODE</text>
+          <g transform="translate(430,190)">
+            <circle r="14" fill="none" stroke="#C73A16" stroke-width="1.5">
+              <animate attributeName="r" values="14;30;14" dur="1.6s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="1;0;1" dur="1.6s" repeatCount="indefinite"/>
+            </circle>
+            <circle r="6" fill="#C73A16"/>
+          </g>
+          <text x="430" y="230" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#C73A16">RTA SITE / NH CORRIDOR</text>
+          <g id="ac-trauma">
+            <path d="M-7,0 L7,0 M0,-6 L0,6" stroke="#C73A16" stroke-width="2.2"/>
+            <circle r="3.4" fill="#C73A16"/>
+          </g>
+          <animateMotion xlink:href="#ac-trauma" dur="2.4s" repeatCount="indefinite" rotate="auto" path="M70,70 C180,90 300,150 430,190"/>
+          <text x="24" y="330" font-family="IBM Plex Mono, monospace" font-size="9" fill="#68665C">// DRONE ARC (LAUNCH TO SITE)</text>
+          <text x="24" y="346" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9C988A">// NH CORRIDOR (ROAD, CONGESTED)</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="flow">
+  <div class="wrap">
+    <div class="kicker reveal"><span class="num">§05</span><h2>How a request actually moves</h2></div>
+    <p class="section-sub reveal">Modeled on the confirmation flow India's home-diagnostics networks already run (Redcliffe Labs, Tata 1mg): WhatsApp confirmation isn't a new behaviour to teach a nurse or a patient. It's already the default.</p>
+
+    <div class="flow reveal">
+      <div class="flow-step accent">
+        <div class="fnum">1</div>
+        <h4>Request</h4>
+        <p>Ward nurse or lab tech sends a WhatsApp/app request: sample type, pickup point, urgency tag.</p>
+      </div>
+      <div class="flow-step">
+        <div class="fnum">2</div>
+        <h4>Dispatch</h4>
+        <p>Hub software matches the nearest aircraft and files a flight plan inside the pre-cleared corridor.</p>
+      </div>
+      <div class="flow-step">
+        <div class="fnum">3</div>
+        <h4>Launch</h4>
+        <p>Aircraft lifts off unattended from the dock, no ground crew required.</p>
+      </div>
+      <div class="flow-step">
+        <div class="fnum">4</div>
+        <h4>In-flight</h4>
+        <p>Live tracking link pushed to the requesting ward; bay logs temperature and vibration throughout.</p>
+      </div>
+      <div class="flow-step">
+        <div class="fnum">5</div>
+        <h4>Land &amp; handoff</h4>
+        <p>Lands at the destination dock; staff scan a chain-of-custody tag; aircraft recharges for relaunch.</p>
+      </div>
+      <div class="flow-step alertnum">
+        <div class="fnum">6</div>
+        <h4>Confirm</h4>
+        <p>WhatsApp confirmation to both ends, with timestamp and flight log, closes the loop.</p>
+      </div>
+    </div>
+    <p class="flow-note">Same flow for both service lines. First Aid as a Service compresses steps 1-3 into an automatic trigger from a control-room call instead of a typed request, everything after stays identical.</p>
+  </div>
+</section>
+
+<section id="usecases">
+  <div class="wrap">
+    <div class="kicker reveal"><span class="num">§06</span><h2>Beyond the two flagship lines</h2></div>
+    <p class="section-sub reveal">Once the hub network exists for diagnostic delivery and trauma response, the same docks and airframes extend to these largely without new hardware. This is the CFO argument: one capex line, six use cases inside a network the chain already owns.</p>
+    <div class="ucgrid reveal">
+      <div class="uccard">
+        <span class="utag proven">Proven in India</span>
+        <h4>Frozen-section relay</h4>
+        <p>Mid-surgery tissue transport between a chain's peripheral and tertiary campuses, deciding resection margins in real time instead of waiting on a courier.</p>
+      </div>
+      <div class="uccard">
+        <span class="utag">Net-new</span>
+        <h4>Blood bank load-balancing</h4>
+        <p>Shifting O-negative or plasma stock between a chain's own blood banks during a local shortage, instead of an emergency courier run.</p>
+      </div>
+      <div class="uccard">
+        <span class="utag global">Proven globally</span>
+        <h4>Organ &amp; tissue transport</h4>
+        <p>Cornea, kidney, and graft transport between a chain's transplant centres, cutting cold-ischemia time on the clock that matters most.</p>
+      </div>
+      <div class="uccard">
+        <span class="utag">Net-new</span>
+        <h4>Chemo &amp; specialty drug relay</h4>
+        <p>Temperature-sensitive oncology drugs moved same-day between campuses instead of next-day courier scheduling.</p>
+      </div>
+      <div class="uccard">
+        <span class="utag">Net-new, consumer-facing</span>
+        <h4>Discharge pharmacy refill</h4>
+        <p>Subscription medicines for chronic-care patients routed to the nearest hub node, skipping a pharmacy queue entirely.</p>
+      </div>
+      <div class="uccard">
+        <span class="utag">Net-new</span>
+        <h4>Disaster / mass-casualty surge</h4>
+        <p>The same docked airframes flex from routine diagnostic runs to bulk trauma-kit airdrop during a mass-casualty event.</p>
+      </div>
+    </div>
+    <p class="uc-note">Sources: frozen-section relay per Kasturba Hospital/ICMR, 2024 (§02); organ and tissue transport per UMMC, 2019 and Toronto General, 2024 (§02). Remaining lines are proposed extensions of the same hub network, not yet piloted anywhere.</p>
+  </div>
+</section>
+
+<section id="platform">
+  <div class="wrap">
+    <div class="kicker reveal"><span class="num">§07</span><h2>Platform</h2></div>
+    <div class="platform">
+      <div class="plat-copy reveal">
+        <h3>One airframe, sized for both missions</h3>
+        <p>A VTOL platform designed from a blank sheet against this market's numbers rather than adapted from an unrelated programme. Same aircraft, same payload bay, for the scheduled diagnostic run and the on-demand trauma dispatch; the two missions share a hub network, not just a company name.</p>
+        <p>Dual-mission by design: cold-chain-rated bay for the diagnostic leg, quick-swap trauma-kit mount for the response leg. Electric VTOL for unprepared-site launch and recovery, with a fast dock-to-dock turnaround so one airframe can cover both duty cycles in a day.</p>
+      </div>
+      <div class="specsheet reveal">
+        <div class="specrow"><span class="k">Range</span><span class="v">20 km</span></div>
+        <div class="specrow"><span class="k">Cruise speed</span><span class="v">120 km/h</span></div>
+        <div class="specrow"><span class="k">Payload</span><span class="v">Up to 3 kg</span></div>
+        <div class="specrow"><span class="k">Launch / recovery</span><span class="v">VTOL, unprepared site</span></div>
+        <div class="specrow"><span class="k">Turnaround / relaunch</span><span class="v">≤5 min, dock to dock</span></div>
+        <div class="specrow"><span class="k">Duty</span><span class="v">Dual-mission</span></div>
+        <div class="specrow"><span class="k">Programme</span><span class="v">Pre-launch</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="wrap">
+    <div class="kicker reveal"><span class="num">§08</span><h2>Market size &amp; the gap</h2></div>
+    <p class="section-sub reveal">Estimates vary widely by research firm depending on scope, global medical drone delivery services is sized anywhere from ~$0.2B to ~$2.9B for 2026 across GMI, FactMR, and TBRC. The figures below use Global Market Insights' segment-level breakout, the most detailed on player share.</p>
+
+    <div class="funnel reveal">
+      <div class="frow">
+        <div class="flabel">Global TAM</div>
+        <div class="fbarwrap"><div class="fbar tam"></div></div>
+        <div>
+          <div class="fval"><b>$2.1B</b> by 2035</div>
+          <div class="fnote">from $210M in 2026 · 29.1% CAGR (GMI)</div>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="flabel">India drone SAM</div>
+        <div class="fbarwrap"><div class="fbar sam"></div></div>
+        <div>
+          <div class="fval"><b>$1.39B</b> by 2030</div>
+          <div class="fnote">from $0.47B in 2025 · 24.4% CAGR, all uses (MarketsandMarkets)</div>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="flabel">Return-leg + trauma</div>
+        <div class="fbarwrap"><div class="fbar gap"></div></div>
+        <div>
+          <div class="fval"><b>No dedicated player</b></div>
+          <div class="fnote">unquantified (not broken out by any research firm surveyed)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats reveal" style="margin-top:32px;">
+      <div class="stat">
+        <div class="big">70%</div>
+        <div class="cap">of the global medical drone delivery market held by 4 outbound-delivery-first players</div>
+        <div class="src">Global Market Insights, 2025</div>
+      </div>
+      <div class="stat">
+        <div class="big">1.83L</div>
+        <div class="cap">road-accident deaths in India, 2025; 21 every hour, with no drone operator serving this as a dedicated product</div>
+        <div class="src">Ministry of Road Transport, via Parliament, 2025</div>
+      </div>
+      <div class="stat">
+        <div class="big">1:90K</div>
+        <div class="cap">ambulance-to-population ratio in India vs. WHO's 1:50K benchmark</div>
+        <div class="src">HHR Journal, Sept 2025</div>
+      </div>
+      <div class="stat">
+        <div class="big">₹272Cr</div>
+        <div class="cap">earmarked FY25-26 for the national cashless trauma scheme; a funding line a trauma-response contract can be built against</div>
+        <div class="src">Govt. of India, cashless treatment scheme, 2025</div>
+      </div>
+    </div>
+    <p class="srcnote">Market figures are third-party research estimates and vary by source.</p>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="footgrid">
+      <div>
+        <div class="label">Entity</div>
+        <div style="font-size:14px;">LogiXair</div>
+      </div>
+      <div>
+        <div class="label">Target</div>
+        <div style="font-size:14px;">A large hospital chain to co-develop an aerial-logistics partnership for multiple use cases</div>
+      </div>
+    </div>
+    <div class="footnote">DOC OW-MED-001 / REV 0.4 / DRAFT WORKING DOCUMENT, NOT FOR EXTERNAL DISTRIBUTION.</div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var els = document.querySelectorAll('.reveal');
+    if('IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold:0.15 });
+      els.forEach(function(el){ io.observe(el); });
+    } else {
+      els.forEach(function(el){ el.classList.add('in'); });
+    }
+  })();
+</script>
+
+</body>
+</html>
